@@ -91,6 +91,10 @@
                 "help": "Working folder.",
                 "default": ""
             },
+            "-header": {
+                "help": "headers",
+                "default": false
+            },
             "-verbose": {
                 "help": "Verbose mode.",
                 "default": false
@@ -143,6 +147,10 @@
             "-working-folder": {
                 "help": "Working folder.",
                 "default": ""
+            },
+            "-header": {
+                "help": "headers",
+                "default": false
             },
             "-verbose": {
                 "help": "Verbose mode.",
