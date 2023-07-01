@@ -57,7 +57,7 @@ def RunParse(log, iparm):
     global lrecl
 
     # Open the copybook for reading and creates the dictionary
-    with open(iparm.copybook, 'r') as finp: output = copybook.toDict(finp.readlines())
+    with open(iparm.copybook, 'r', encoding='cp437') as finp: output = copybook.toDict(finp.readlines())
 
     # Write the dict into a file if requested
     if iparm.json_debug != '':

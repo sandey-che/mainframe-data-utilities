@@ -82,9 +82,18 @@ def FileProcess(log, ExtArgs):
 
         cyFiles = cycle(lstFiles)
 
+    #Write headers to files
+    header =[]
+    if fMetaData.general['output_type'] in ['file', 's3_obj', 's3']:
+        if fMetaData.general['header']:
+            for transf in fMetaData.general['transf']:
+                header.append(transf['name'])
+            outfile.write(fMetaData.general['output_separator'].join(header))
+            fMetaData.general['header'] = False
+            
     # Process each input record
     i=0
-    newl=''
+    newl='\n'
     while i < fMetaData.general['max'] or fMetaData.general['max'] == 0:
 
         record = read(InpDS, fMetaData.general['input_recfm'], fMetaData.general["input_recl"])
@@ -95,7 +104,7 @@ def FileProcess(log, ExtArgs):
         if i > fMetaData.general["skip"]:
 
             if(fMetaData.general["print"] != 0 and i % fMetaData.general["print"] == 0): log.Write(['Records read', str(i)])
-
+            
             if fMetaData.general['threads'] == 1:
                 r = write_output(log, fMetaData, outfile, record, newl)
                 if r: newl='\n'
@@ -203,6 +212,7 @@ def read(input, recfm, lrecl):
         return input.read(lrecl)
     else:
         l = getRDW(input.read(4))
+        print('getRWD',l)
         return input.read(l)
 
 def getRDW(b: bytearray):
