@@ -67,8 +67,10 @@ def FileProcess(log, ExtArgs):
         lstProce = []
 
         for f in range(1, fMetaData.general['threads']+1):
+            
+            filename = fMetaData.general['output'].split(".")[0] + '_' + str(f) +'.'+ fMetaData.general['output'].split(".")[1]
 
-            strOutFile = fMetaData.general['working_folder'] + fMetaData.general['output'] + "." + str(f)
+            strOutFile = fMetaData.general['working_folder'] + filename
 
             lstFiles.append(strOutFile)
 
@@ -82,14 +84,6 @@ def FileProcess(log, ExtArgs):
 
         cyFiles = cycle(lstFiles)
 
-    #Write headers to files
-    header =[]
-    if fMetaData.general['output_type'] in ['file', 's3_obj', 's3']:
-        if fMetaData.general['header']:
-            for transf in fMetaData.general['transf']:
-                header.append(transf['name'])
-            outfile.write(fMetaData.general['output_separator'].join(header))
-            fMetaData.general['header'] = False
             
     # Process each input record
     i=0
@@ -122,6 +116,15 @@ def FileProcess(log, ExtArgs):
     log.Write(['Records processed', str(i)])
 
 def write_output(log, fMetaData, outfile, record, newl):
+    
+    #Write headers to files
+    header =[]
+    if fMetaData.general['output_type'] in ['file', 's3_obj', 's3']:
+        if fMetaData.general['header']:
+            for transf in fMetaData.general['transf']:
+                header.append(transf['name'])
+            outfile.write(fMetaData.general['output_separator'].join(header))
+            fMetaData.general['header'] = False
 
     OutRec = [] if fMetaData.general['output_type'] in ['file', 's3-obj', 's3'] else {}
 
@@ -193,7 +196,7 @@ def queue_worker(log, fMetaData, OutDs, q, strSuf = ''):
     else:
         outfile = []
 
-    newl = ''
+    newl = '\n'
 
     while True:
         record = q.get()
